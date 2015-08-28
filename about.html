@@ -1,0 +1,25 @@
+<div class="container">
+    <div class="description">
+        <span class="label">ФИО</span>
+        <span class="info">{{app.author}}</span>
+    </div>
+    <div class="description">
+        <span class="label">Телфон</span>
+        <span class="info">{{app.phone}}</span>
+    </div>
+    <div class="description">
+        <span class="label">E-mail</span>
+        <span class="info">{{app.email}}</span>
+    </div>
+    <div class="description">
+        <span class="label">Skype</span>
+        <span class="info">{{app.skype}}</span>
+    </div>
+    <div class="listing">
+        Владение навыками и знаниями:
+        <div ng-repeat="tech in data" class="description">
+            <span class="label">{{tech.name}}</span>
+            <span class="item" ng-repeat="item in tech.items" ng-tooltip="item.tooltip">{{item.name}}</span>
+        </div>
+    </div>
+</div>
