@@ -1,0 +1,144 @@
+<div class="dialog-container">
+    <a href="applicants/add" class="dialog-open dialog-trigger" ng-if="!edit">
+        <i class="fa fa-plus-circle"></i>
+        <span>Добавить соискателя</span>
+    </a>
+    <a href="applicants/delete" class="dialog-trigger delete-all" ng-if="!edit">
+        <i class="fa fa-trash"></i>
+        <span>Удалить всех</span>
+    </a>
+    <div class="edit-icon" ng-if="edit">
+        <i class="fa fa-pencil"></i>
+    </div>
+    <div class="dialog-background" ng-show="dialog">
+        <div class="dialog-box">
+            <div class="dialog-header" ng-if="!edit">Добавить соискателя</div>
+            <div class="dialog-header" ng-if="edit">Редактирование соискателя: "{{applicant.surname}}"</div>
+            <div class="dialog-content">
+                <form name="form">
+                    <div class="form-control">
+                        <label for="name">Имя:</label>
+                        <input type="text" name="name"
+                               ng-minlength="settings.length.name.min" ng-maxlength="settings.length.name.max"
+                               ng-model="applicant.name">
+                        <div class="errors">
+                            <div class="error" ng-if="form.name.$invalid"
+                                 ng-mouseleave="error=''"
+                                 ng-mouseover="error='Мало символов'">
+                                <i class="fa fa-exclamation-triangle"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-control">
+                        <label for="surname">Фамилия:</label>
+                        <input type="text" name="surname" ng-pattern="settings.patterns.surname"
+                               ng-minlength="settings.length.surname.min" ng-maxlength="settings.length.surname.max"
+                               ng-model="applicant.surname">
+                        <div class="errors">
+                            <div class="error" ng-if="form.surname.$invalid">
+                                <i class="fa fa-exclamation-triangle"></i>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="form-control">
+                    <div class="error-log">{{getError()}}</div>
+                    <a href="applicants" class="dialog-apply" ng-click="save($event)">Ок</a>
+                </div>
+            </div>
+            <div class="dialog-footer">
+                <a href="applicants" class="dialog-cancel dialog-trigger">
+                    <i class="fa fa-times-circle"></i>
+                    <span>Отмена</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="alert-container" ng-show="alert">
+    <div class="alert-backgroud">
+        <div class="alert-box">
+            <div class="alert-header" ng-if="!all">
+                Удаление соискателя.
+            </div>
+            <div class="alert-content" ng-if="!all">
+                Вы уверены что хотите удалить соискателя "{{applicant.surname}}"?
+            </div>
+            <div class="alert-header" ng-if="all">
+                Удаление соискателей.
+            </div>
+            <div class="alert-content" ng-if="all">
+                Вы уверены что хотите удалить всех соискателей?
+            </div>
+            <div class="alert-footer">
+                <a href="applicants" ng-click="delete($event)">Подтвердить</a>
+                <a href="applicants">Отменить</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="tabs">
+    <ul>
+        <li ng-class="{'active': app.tab=='applicants'}"><a href="applicants">Таблица</a></li>
+        <li ng-class="{'active': app.tab=='settings'}"><a href="settings">Настройки</a></li>
+    </ul>
+</div>
+<div class="tabs-container">
+    <div class="tab" ng-if="app.tab=='applicants'">
+        <table>
+            <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Код</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-if="applicants !== undefined && !applicants.length">
+                <td colspan="4">
+                    Нет результатов
+                </td>
+            </tr>
+            <tr ng-if="applicants === undefined">
+                <td colspan="4">
+                    Данные не загружены
+                </td>
+            </tr>
+            <tr ng-repeat="item in applicants">
+                <td>{{item.name}}</td>
+                <td>{{item.surname}}</td>
+                <td data-app-code></td>
+                <td>
+                    <a href="applicants/edit/{{item.id}}" class="app-control"><i class="fa fa-pencil-square"></i></a>
+                    <a href="applicants/delete/{{item.id}}" class="app-control"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="tab" ng-if="app.tab=='settings'">
+        <div class="settings-data">
+            <fieldset>
+                <legend>Интерфейс</legend>
+                <div class="form-control">
+                    <label for="background">Цвет фона</label>
+                    <select id="background" ng-model="settings.background"
+                            ng-options="i.value as i.label for i in settings.backgrounds"></select>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Валидация</legend>
+                <div class="form-control">
+                    <label for="background">Для поля "Фамилия"</label>
+                    <input type="text" ng-model="settings.patterns.surname">
+                </div>
+            </fieldset>
+        </div>
+        <div class="settings-control">
+            <!--<button ng-click="reset()" ng-disabled="!changes">Сбросить</button>-->
+            <!--<button ng-click="save()" ng-disabled="!changes">Сохранить</button>-->
+            <button ng-click="save()">Сохранить</button>
+        </div>
+    </div>
+</div>
